@@ -7,3 +7,4 @@ cmake -S . -B build_debug -DCMAKE_BUILD_TYPE=Debug && cd build_debug && make && 
 ```shell
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release && cd build && make && cd ..
 ```
+После сборки в папке bin будут находиться исполняемые файлы программы и тестов
