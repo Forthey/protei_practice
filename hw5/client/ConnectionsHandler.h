@@ -14,11 +14,13 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 
+#include "utility/random_int.h"
+
 
 class ConnectionsHandler {
 public:
     struct Context {
-        std::string expr;
+        std::string expressions;
     };
 
     struct Connection {
@@ -144,10 +146,10 @@ public:
                 Connection &c = conns[fd];
 
                 if (!c.done && (events[i].events & EPOLLOUT)) {
-                    if (c.sent.size() < c.ctx.expr.size()) {
-                        std::size_t left = c.ctx.expr.size() - c.sent.size();
-                        std::size_t frag = 1 + (rand() % left);
-                        std::string part = c.ctx.expr.substr(c.sent.size(), frag);
+                    if (c.sent.size() < c.ctx.expressions.size()) {
+                        std::size_t left = c.ctx.expressions.size() - c.sent.size();
+                        std::size_t frag = random_int(1, static_cast<int>(left));
+                        std::string part = c.ctx.expressions.substr(c.sent.size(), frag);
                         long sent_bytes = send(fd, part.c_str(), part.size(), 0);
                         if (sent_bytes < 0) {
                             perror("send");
@@ -156,7 +158,7 @@ public:
                         }
                         c.sent.append(part.substr(0, sent_bytes));
                     }
-                    if (c.sent.size() == c.ctx.expr.size()) {
+                    if (c.sent.size() == c.ctx.expressions.size()) {
                         ev.events = EPOLLIN;
                         ev.data.fd = fd;
                         if (epoll_ctl(epoll_fd, EPOLL_CTL_MOD, fd, &ev) < 0) {

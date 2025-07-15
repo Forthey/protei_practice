@@ -61,7 +61,9 @@ public:
 
         for (int i = 0; i < n; ++i) {
             oss << num_dist(gen);
-            if (i < n - 1) oss << ops[op_dist(gen)];
+            if (i < n - 1) {
+                oss << ops[op_dist(gen)];
+            }
         }
         return oss.str();
     }

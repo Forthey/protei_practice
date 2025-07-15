@@ -27,7 +27,7 @@ public:
                 long const res = (ops[i] == '*') ? a * b : a / b;
 
                 nums[i] = res;
-                nums.erase(std::next(nums.begin(), i + 1ull));
+                nums.erase(std::next(nums.begin(), i + 1));
                 ops.erase(std::next(ops.begin(), i));
             } else ++i;
         }
